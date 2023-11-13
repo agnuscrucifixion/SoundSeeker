@@ -2,7 +2,7 @@ package ru.padwicki.soundseeker.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.padwicki.soundseeker.config.authorization.SpotifyAuth;
+import ru.padwicki.soundseeker.config.auth.SpotifyAuth;
 import ru.padwicki.soundseeker.serviceInterfaces.HubServiceInterface;
 
 import java.net.URI;

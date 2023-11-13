@@ -16,9 +16,8 @@ public class SwaggerConfig implements WebMvcConfigurer {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).select()
-                .apis(RequestHandlerSelectors.basePackage("com.padwicki.soundseeker"))
-                .paths(PathSelectors.regex("/convert/.*"))
-                .paths(PathSelectors.regex("/rec/.*"))
+                .apis(RequestHandlerSelectors.basePackage("ru.padwicki.soundseeker"))
+                .paths(PathSelectors.regex("/.*"))
                 .build().apiInfo(apiInfoMetaData());
     }
 

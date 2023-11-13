@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.padwicki.soundseeker.config.authorization.SpotifyAuth;
+import ru.padwicki.soundseeker.config.auth.SpotifyAuth;
 import ru.padwicki.soundseeker.controllersInterfaces.HubControllerInterface;
 import ru.padwicki.soundseeker.service.HubService;
 

@@ -19,6 +19,9 @@ target/
 *.iml
 *.ipr
 
+application.properties
+.gitignore
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

@@ -12,13 +12,13 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
-@EnableWebMvc
 public class SwaggerConfig implements WebMvcConfigurer {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).select()
                 .apis(RequestHandlerSelectors.basePackage("com.padwicki.soundseeker"))
-                .paths(PathSelectors.regex("/.*"))
+                .paths(PathSelectors.regex("/convert/.*"))
+                .paths(PathSelectors.regex("/rec/.*"))
                 .build().apiInfo(apiInfoMetaData());
     }
 

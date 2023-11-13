@@ -19,7 +19,10 @@ target/
 *.iml
 *.ipr
 
-application.properties
+src/resources/
+*.properties
+
+
 .gitignore
 
 ### NetBeans ###

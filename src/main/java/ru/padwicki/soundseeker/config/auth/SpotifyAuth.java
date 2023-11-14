@@ -27,7 +27,7 @@ public class SpotifyAuth implements InitializingBean {
     private AuthorizationCodeUriRequest authorizationCodeUriRequest;
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
        final SpotifyApi spotifyApi = new SpotifyApi.Builder()
                 .setClientId(clientId)
                 .setClientSecret(clientSecret)

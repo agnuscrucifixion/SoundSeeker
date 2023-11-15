@@ -19,7 +19,12 @@ public class StSController implements StSControllerInterface {
         this.stsService = stsService;
     }
     @Override
-    public void Convert(String id) throws IOException, ParseException, SpotifyWebApiException {
+    public void convertTrack(String id) throws IOException, ParseException, SpotifyWebApiException {
         stsService.getTrack(id);
+    }
+
+    @Override
+    public void convertTrackFromAlbum(String id) throws IOException, ParseException, SpotifyWebApiException {
+        stsService.gerTracksFromAlbum(id);
     }
 }

@@ -11,5 +11,8 @@ import java.io.IOException;
 @RequestMapping("/sts")
 public interface StSControllerInterface {
     @GetMapping("/convertTrack")
-    public void Convert(@RequestParam String id) throws IOException, ParseException, SpotifyWebApiException;
+    void convertTrack(@RequestParam String id) throws IOException, ParseException, SpotifyWebApiException;
+
+    @GetMapping("/convertTrackFromAlbum")
+    void convertTrackFromAlbum(@RequestParam String id) throws IOException, ParseException, SpotifyWebApiException;
 }

@@ -9,5 +9,7 @@ import java.io.IOException;
 public interface StSServiceInterface {
     void getTrack(@RequestParam String id) throws IOException, ParseException, SpotifyWebApiException;
 
-    void gerTracksFromAlbum(@RequestParam String id) throws IOException, ParseException, SpotifyWebApiException;
+    void getTracksFromAlbum(@RequestParam String id) throws IOException, ParseException, SpotifyWebApiException;
+
+    void getOwnUserPlaylists() throws IOException, ParseException, SpotifyWebApiException;
 }

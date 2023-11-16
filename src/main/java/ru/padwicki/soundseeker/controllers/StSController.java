@@ -8,6 +8,7 @@ import ru.padwicki.soundseeker.controllersInterfaces.StSControllerInterface;
 import ru.padwicki.soundseeker.pyBase.pyYandex;
 import ru.padwicki.soundseeker.service.StsService;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
 
@@ -25,6 +26,16 @@ public class StSController implements StSControllerInterface {
 
     @Override
     public void convertTrackFromAlbum(String id) throws IOException, ParseException, SpotifyWebApiException {
-        stsService.gerTracksFromAlbum(id);
+        stsService.getTracksFromAlbum(id);
+    }
+
+    @Override
+    public void getOwnUserPlaylists() throws IOException, ParseException, SpotifyWebApiException {
+        stsService.getOwnUserPlaylists();
+    }
+
+    @Override
+    public void handleSwaggerRedirect(String code) throws IOException, ParseException, SpotifyWebApiException {
+        stsService.initApi(code);
     }
 }

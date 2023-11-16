@@ -1,14 +1,12 @@
 package ru.padwicki.soundseeker.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.hc.core5.http.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.padwicki.soundseeker.config.auth.SpotifyAuth;
 import ru.padwicki.soundseeker.controllersInterfaces.HubControllerInterface;
 import ru.padwicki.soundseeker.service.HubService;
+import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import java.io.IOException;
 
 
 @Controller
@@ -21,7 +19,7 @@ public class HubController implements HubControllerInterface {
     }
 
     @Override
-    public String startPage(Model model) {
+    public String startPage(Model model) throws IOException, ParseException, SpotifyWebApiException {
         model.addAttribute("urlSpotify", hubService.authorization());
         return "hub";
     }

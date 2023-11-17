@@ -21,7 +21,6 @@ public class HubService implements HubServiceInterface {
     }
     @Override
     public URI authorization(){
-        URI url = spotifyAuth.authorization();
-        return url;
+        return spotifyAuth.authorization();
     }
 }

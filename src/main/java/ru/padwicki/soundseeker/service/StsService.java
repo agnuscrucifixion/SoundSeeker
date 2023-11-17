@@ -7,24 +7,24 @@ import org.springframework.stereotype.Service;
 import ru.padwicki.soundseeker.config.auth.SpotifyAuth;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
-import se.michaelthelin.spotify.model_objects.specification.Paging;
-import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
-import se.michaelthelin.spotify.model_objects.specification.Track;
-import se.michaelthelin.spotify.model_objects.specification.TrackSimplified;
+import se.michaelthelin.spotify.model_objects.specification.*;
 import se.michaelthelin.spotify.requests.data.albums.GetAlbumsTracksRequest;
 import se.michaelthelin.spotify.requests.data.player.GetUsersCurrentlyPlayingTrackRequest;
 import se.michaelthelin.spotify.requests.data.playlists.GetListOfCurrentUsersPlaylistsRequest;
+import se.michaelthelin.spotify.requests.data.playlists.GetPlaylistsItemsRequest;
 import se.michaelthelin.spotify.requests.data.tracks.GetTrackRequest;
 import org.apache.hc.core5.http.ParseException;
 import ru.padwicki.soundseeker.serviceInterfaces.StSServiceInterface;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
+import java.util.*;
 
 @Service
 public class StsService implements StSServiceInterface {
     SpotifyAuth spotifyAuth;
+    private static String authCode;
+    private List<PlaylistSimplified> playlists;
     @Autowired
     public StsService(SpotifyAuth spotifyAuth) {
         this.spotifyAuth = spotifyAuth;
@@ -74,18 +74,39 @@ public class StsService implements StSServiceInterface {
     }
 
 
-    @Override
-    public void getOwnUserPlaylists() throws IOException, ParseException, SpotifyWebApiException {
+    public List<PlaylistSimplified> getOwnUserPlaylists() throws IOException, ParseException, SpotifyWebApiException {
         GetListOfCurrentUsersPlaylistsRequest getListOfCurrentUsersPlaylistsRequest = spotifyApi
                 .getListOfCurrentUsersPlaylists()
                 .build();
-        Paging<PlaylistSimplified> playlists = getListOfCurrentUsersPlaylistsRequest.execute();
-        for (int i = 0; i < playlists.getItems().length; i++) {
-            System.out.println(playlists.getItems()[i].getName() + "\n" + playlists.getItems()[i].getTracks().getTotal());
-        }
-
+        playlists = Arrays.stream(getListOfCurrentUsersPlaylistsRequest.execute().getItems()).toList();
+        return playlists;
     }
 
+    public List<PlaylistTrack> show(String name) throws IOException, ParseException, SpotifyWebApiException {
+        GetPlaylistsItemsRequest getPlaylistsItemsRequest;
+        Paging<PlaylistTrack> list;
+        List<PlaylistTrack> allTracks = new ArrayList<>();
+        Optional<PlaylistSimplified> playlist = playlists
+                .stream()
+                .filter(track -> Objects.equals(track.getName(), name))
+                .findAny();
+        if (playlist.isPresent()) {
+            int offset = 0;
+            int limit = 100;
+            do {
+                getPlaylistsItemsRequest = spotifyApi
+                        .getPlaylistsItems(playlist.get().getId())
+                        .offset(offset)
+                        .limit(limit)
+                        .build();
+                list =  getPlaylistsItemsRequest.execute();
+                List<PlaylistTrack> items = Arrays.asList(list.getItems());
+                allTracks.addAll(items);
+                offset += limit;
+            } while (offset < list.getTotal());
 
+        }
+        return allTracks;
+    }
 
 }

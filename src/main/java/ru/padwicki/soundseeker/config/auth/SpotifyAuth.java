@@ -24,19 +24,16 @@ public class SpotifyAuth implements InitializingBean {
     private String clientSecret;
     private static final URI redirectUri = SpotifyHttpManager.makeUri("http://localhost:8080/callback");
     private AuthorizationCodeUriRequest authorizationCodeUriRequest;
-    private AuthorizationCodeRequest authorizationCodeRequest;
     private URI url;
     private SpotifyApi spotifyApi;
-    private String accessToken;
-    private String refreshToken;
 
     public String[] clientCredentials(String codeLocal) throws IOException, ParseException, SpotifyWebApiException {
-        authorizationCodeRequest = spotifyApi.authorizationCode(codeLocal)
+        AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(codeLocal)
                 .build();
         final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
-        accessToken = authorizationCodeCredentials.getAccessToken();
+        String accessToken = authorizationCodeCredentials.getAccessToken();
         spotifyApi.setAccessToken(accessToken);
-        refreshToken = authorizationCodeCredentials.getRefreshToken();
+        String refreshToken = authorizationCodeCredentials.getRefreshToken();
         spotifyApi.setRefreshToken(refreshToken);
         return new String[]{clientId, clientSecret, redirectUri.toString(), codeLocal, accessToken, refreshToken};
     }

@@ -22,10 +22,9 @@ public class SpotifyAuth implements InitializingBean {
     private String clientId;
     @Value("${spotify.client_secret}")
     private String clientSecret;
-    private static final URI redirectUri = SpotifyHttpManager.makeUri("http://localhost:8080/swagger-ui/index.html#/");
+    private static final URI redirectUri = SpotifyHttpManager.makeUri("http://localhost:8080/callback");
     private AuthorizationCodeUriRequest authorizationCodeUriRequest;
     private AuthorizationCodeRequest authorizationCodeRequest;
-    private String code;
     private URI url;
     private SpotifyApi spotifyApi;
     private String accessToken;
@@ -52,7 +51,9 @@ public class SpotifyAuth implements InitializingBean {
                 .build();
     }
     public URI authorization() {
-        url = authorizationCodeUriRequest.execute();
+        if (url == null) {
+            url = authorizationCodeUriRequest.execute();
+        }
         return url;
     }
 }

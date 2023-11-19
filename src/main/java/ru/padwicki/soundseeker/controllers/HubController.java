@@ -14,6 +14,7 @@ import java.io.IOException;
 @Controller
 public class HubController implements HubControllerInterface {
 
+    private int count = 0;
     HubService hubService;
     StsService stsService;
     public HubController(HubService hubService, StsService stsService) {
@@ -31,9 +32,19 @@ public class HubController implements HubControllerInterface {
 
     @Override
     public String handleCallBack(String code, Model model) throws IOException, ParseException, SpotifyWebApiException {
+        if (count == 1) {
+            model.addAttribute("playlists", stsService.getOwnUserPlaylists());
+        }
+        count++;
+        if(count == 1) {
+            stsService.initApi(code);
+            return "service-to-service/sts";
+        }
         stsService.initApi(code);
-        return "service-to-service/sts";
+        count = 0;
+        return "service-to-service/spotify-to-spotify-page";
     }
+
 
     @Override
     public String convertPage() {

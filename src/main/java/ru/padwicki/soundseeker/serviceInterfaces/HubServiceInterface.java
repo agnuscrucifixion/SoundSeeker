@@ -7,5 +7,5 @@ import java.io.IOException;
 import java.net.URI;
 
 public interface HubServiceInterface {
-    public URI authorization() throws IOException, ParseException, SpotifyWebApiException;
+    URI authorization() throws IOException, ParseException, SpotifyWebApiException;
 }

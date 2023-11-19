@@ -2,10 +2,7 @@ package ru.padwicki.soundseeker.controllersInterfaces;
 
 import org.apache.hc.core5.http.ParseException;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -14,8 +11,10 @@ import java.io.IOException;
 @RequestMapping("/sts")
 public interface StSControllerInterface {
 
-    @GetMapping("/spotify-to-spotify")
-    String spotifyToSpotify(Model model) throws IOException, ParseException, SpotifyWebApiException;
+    @GetMapping("/spotify-to-spotify-login-page")
+    String spotifyToSpotifyLoginPage(Model model) throws IOException, ParseException, SpotifyWebApiException;
+    @PostMapping("/spotify-to-spotify")
+    String spotifyToSpotify(@ModelAttribute("name") String name) throws IOException, ParseException, SpotifyWebApiException;
 
 
 

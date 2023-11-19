@@ -1,4 +1,5 @@
 package ru.padwicki.soundseeker.config.auth;
+
 import org.apache.hc.core5.http.ParseException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,10 +15,11 @@ import se.michaelthelin.spotify.requests.authorization.authorization_code.Author
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.util.Set;
 
 @Component("SpotifyAuthURL")
 @PropertySource("classpath:application.properties")
-public class SpotifyAuth implements InitializingBean {
+public class SpotifyAuth {
     @Value("${spotify.client_id}")
     private String clientId;
     @Value("${spotify.client_secret}")
@@ -26,8 +28,9 @@ public class SpotifyAuth implements InitializingBean {
     private AuthorizationCodeUriRequest authorizationCodeUriRequest;
     private URI url;
     private SpotifyApi spotifyApi;
+    Set<String> scopes = Set.of("playlist-read-private", "playlist-read-collaborative", "playlist-modify-public", "playlist-modify-private");
 
-    public String[] clientCredentials(String codeLocal) throws IOException, ParseException, SpotifyWebApiException {
+    public SpotifyApi clientCredentials(String codeLocal) throws IOException, ParseException, SpotifyWebApiException {
         AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(codeLocal)
                 .build();
         final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
@@ -35,22 +38,20 @@ public class SpotifyAuth implements InitializingBean {
         spotifyApi.setAccessToken(accessToken);
         String refreshToken = authorizationCodeCredentials.getRefreshToken();
         spotifyApi.setRefreshToken(refreshToken);
-        return new String[]{clientId, clientSecret, redirectUri.toString(), codeLocal, accessToken, refreshToken};
+        return spotifyApi;
     }
-    @Override
-    public void afterPropertiesSet() {
+
+    public URI authorization() {
         spotifyApi = new SpotifyApi.Builder()
                 .setClientId(clientId)
                 .setClientSecret(clientSecret)
                 .setRedirectUri(redirectUri)
                 .build();
         authorizationCodeUriRequest = spotifyApi.authorizationCodeUri()
+                .scope(String.join(" ", scopes))
+                .show_dialog(true)
                 .build();
-    }
-    public URI authorization() {
-        if (url == null) {
-            url = authorizationCodeUriRequest.execute();
-        }
+        url = authorizationCodeUriRequest.execute();
         return url;
     }
 }

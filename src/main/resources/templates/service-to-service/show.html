@@ -7,7 +7,7 @@
 <body>
 <div th:each="tracks : ${playlist}">
     <a
-       th:text="${tracks.getTrack().getName()}">VALUE</a>
+       th:text="${tracks.getArtists()[0].getName() + ' - ' + tracks.getName()}">VALUE</a>
 </div>
 <br/>
 </body>

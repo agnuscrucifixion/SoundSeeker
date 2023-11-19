@@ -25,18 +25,18 @@ public class StSController implements StSControllerInterface {
     public String spotifyToSpotifyLoginPage(Model model) throws IOException, ParseException, SpotifyWebApiException {
         model.addAttribute("playlists", stsService.getOwnUserPlaylists());
         model.addAttribute("urlSpotify", hubService.authorization());
-        return "service-to-service/spotify-to-spotify-page-loginSecond";
+        return "spotify-to-spotify/spotify-to-spotify-page-loginSecond";
     }
 
     @Override
     public String spotifyToSpotify(String name) throws IOException, ParseException, SpotifyWebApiException {
         stsService.convert(name);
-        return "service-to-service/success";
+        return "success";
     }
 
     @Override
     public String show(String name, Model model) throws IOException, ParseException, SpotifyWebApiException {
         model.addAttribute("playlist", stsService.show(name));
-        return "service-to-service/show";
+        return "spotify-to-spotify/show";
     }
 }

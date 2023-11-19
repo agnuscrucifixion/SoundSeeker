@@ -38,16 +38,16 @@ public class HubController implements HubControllerInterface {
         count++;
         if(count == 1) {
             stsService.initApi(code);
-            return "service-to-service/sts";
+            return "sts";
         }
         stsService.initApi(code);
         count = 0;
-        return "service-to-service/spotify-to-spotify-page";
+        return "spotify-to-spotify/spotify-to-spotify-page";
     }
 
 
     @Override
     public String convertPage() {
-        return "service-to-service/convert";
+        return "convert";
     }
 }

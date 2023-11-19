@@ -6,11 +6,20 @@
 </head>
 <body>
 
+<form th:method="POST" th:action="@{/sts/spotify-to-spotify}">
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name">
+    <button type="submit">Submit</button>
+</form>
+
+<br>
+<br>
+
 <div th:each="playlist : ${playlists}">
+    <br>
     <a th:if="${playlist != null}"
        th:href="@{/sts/{name}(name=${playlist.getName()})}"
        th:text="${playlist.getName()}">playlist</a>
 </div>
-
 </body>
 </html>

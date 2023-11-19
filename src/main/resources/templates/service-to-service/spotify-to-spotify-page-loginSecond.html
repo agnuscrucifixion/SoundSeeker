@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<a th:href="@{${urlSpotify}}">Log In</a>
+
+
+<div th:each="playlist : ${playlists}">
+    <br>
+    <a th:if="${playlist != null}"
+       th:href="@{/sts/{name}(name=${playlist.getName()})}"
+       th:text="${playlist.getName()}">playlist</a>
+</div>
+
+</body>
+</html>

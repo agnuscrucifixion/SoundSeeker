@@ -60,7 +60,8 @@ public class HubService implements HubServiceInterface {
         GetListOfCurrentUsersPlaylistsRequest getListOfCurrentUsersPlaylistsRequest = spotifyApi
                 .getListOfCurrentUsersPlaylists()
                 .build();
-        playlists = Arrays.stream(getListOfCurrentUsersPlaylistsRequest.execute().getItems()).toList();
+        playlists = Arrays.stream(getListOfCurrentUsersPlaylistsRequest.execute().getItems()).filter(track -> !Objects.equals(track.getOwner().getDisplayName(), "Spotify")).toList();
+
         return playlists;
     }
 

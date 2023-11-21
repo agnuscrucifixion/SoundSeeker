@@ -18,7 +18,7 @@
 <div th:each="playlist : ${playlists}">
     <br>
     <a th:if="${playlist != null}"
-       th:href="@{/sts/{name}(name=${playlist.getName()})}"
+       th:href="@{/{name}(name=${playlist.getName()})}"
        th:text="${playlist.getName()}">playlist</a>
 </div>
 </body>

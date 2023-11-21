@@ -3,6 +3,8 @@ package ru.padwicki.soundseeker.controllers;
 import org.apache.hc.core5.http.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import ru.padwicki.soundseeker.controllersInterfaces.HubControllerInterface;
 import ru.padwicki.soundseeker.service.HubService;
 import ru.padwicki.soundseeker.service.StsService;
@@ -33,14 +35,14 @@ public class HubController implements HubControllerInterface {
     @Override
     public String handleCallBack(String code, Model model) throws IOException, ParseException, SpotifyWebApiException {
         if (count == 1) {
-            model.addAttribute("playlists", stsService.getOwnUserPlaylists());
+            model.addAttribute("playlists", hubService.getOwnUserPlaylistsSpotify());
         }
         count++;
         if(count == 1) {
-            stsService.initApi(code);
+            hubService.initApi(code);
             return "sts";
         }
-        stsService.initApi(code);
+        hubService.initApi(code);
         count = 0;
         return "spotify-to-spotify/spotify-to-spotify-page";
     }
@@ -50,4 +52,14 @@ public class HubController implements HubControllerInterface {
     public String convertPage() {
         return "convert";
     }
+
+    @Override
+    public String show(String name, Model model) throws IOException, ParseException, SpotifyWebApiException {
+        model.addAttribute("playlist", hubService.show(name));
+        return "spotify-to-spotify/show";
+    }
+
+    @Override
+    public void returnNoFavicon() {}
+
 }

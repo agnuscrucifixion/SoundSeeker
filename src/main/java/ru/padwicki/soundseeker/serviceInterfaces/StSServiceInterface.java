@@ -13,9 +13,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface StSServiceInterface {
-    List<PlaylistSimplified> getOwnUserPlaylists() throws IOException, ParseException, SpotifyWebApiException;
-
-    List<Track> show(String name) throws IOException, ParseException, SpotifyWebApiException;
     void convert(String name) throws IOException, ParseException, SpotifyWebApiException;
 }
 

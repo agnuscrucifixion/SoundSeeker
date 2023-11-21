@@ -17,8 +17,4 @@ public interface StSControllerInterface {
     String spotifyToSpotify(@ModelAttribute("name") String name) throws IOException, ParseException, SpotifyWebApiException;
 
 
-
-
-    @GetMapping("/{name}")
-    String show(@PathVariable("name") String name, Model model) throws IOException, ParseException, SpotifyWebApiException;
 }

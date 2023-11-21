@@ -1,6 +1,7 @@
 package ru.padwicki.soundseeker.controllers;
 
 import org.apache.hc.core5.http.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import ru.padwicki.soundseeker.controllersInterfaces.StSControllerInterface;
@@ -15,6 +16,7 @@ public class StSController implements StSControllerInterface {
 
     StsService stsService;
     HubService hubService;
+    @Autowired
     public StSController(StsService stsService, HubService hubService) {
         this.stsService = stsService;
         this.hubService = hubService;
@@ -23,7 +25,7 @@ public class StSController implements StSControllerInterface {
 
     @Override
     public String spotifyToSpotifyLoginPage(Model model) throws IOException, ParseException, SpotifyWebApiException {
-        model.addAttribute("playlists", stsService.getOwnUserPlaylists());
+        model.addAttribute("playlists", hubService.getOwnUserPlaylistsSpotify());
         model.addAttribute("urlSpotify", hubService.authorization());
         return "spotify-to-spotify/spotify-to-spotify-page-loginSecond";
     }
@@ -34,9 +36,5 @@ public class StSController implements StSControllerInterface {
         return "success";
     }
 
-    @Override
-    public String show(String name, Model model) throws IOException, ParseException, SpotifyWebApiException {
-        model.addAttribute("playlist", stsService.show(name));
-        return "spotify-to-spotify/show";
-    }
+
 }

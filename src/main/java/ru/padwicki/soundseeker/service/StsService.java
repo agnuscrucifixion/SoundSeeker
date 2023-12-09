@@ -8,6 +8,8 @@ import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.specification.*;
 import se.michaelthelin.spotify.requests.data.albums.GetAlbumsTracksRequest;
+import se.michaelthelin.spotify.requests.data.library.RemoveUsersSavedTracksRequest;
+import se.michaelthelin.spotify.requests.data.library.SaveTracksForUserRequest;
 import se.michaelthelin.spotify.requests.data.playlists.AddItemsToPlaylistRequest;
 import se.michaelthelin.spotify.requests.data.playlists.CreatePlaylistRequest;
 import se.michaelthelin.spotify.requests.data.playlists.GetListOfCurrentUsersPlaylistsRequest;
@@ -23,15 +25,18 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
 public class StsService implements StSServiceInterface {
+    private static final int MAX_TRACKS_PER_REQUEST = 50;
     HubService hubService;
     @Autowired
     public StsService(HubService hubService) {
         this.hubService = hubService;
     }
+
 
     @Override
     public void convert(String name) throws IOException, ParseException, SpotifyWebApiException {
@@ -62,5 +67,36 @@ public class StsService implements StSServiceInterface {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void convertLikedSongs() throws IOException, ParseException, SpotifyWebApiException {
+        Collections.reverse(hubService.likedSongs);
+        for (int i = 0; i < hubService.likedSongs.size(); i += MAX_TRACKS_PER_REQUEST) {
+            int toIndex = Math.min(i + MAX_TRACKS_PER_REQUEST, hubService.likedSongs.size());
+            List<Track> tracks = hubService.likedSongs.subList(i, toIndex);
+            String[] trackIds = tracks.stream()
+                    .map(Track::getId)
+                    .toArray(String[]::new);
+            SaveTracksForUserRequest saveTracksForUserRequest = hubService.spotifyApi.saveTracksForUser(trackIds)
+                    .build();
+            saveTracksForUserRequest.execute();
+        }
+
+    }
+
+    @Override
+    public void deleteLikedSongs() throws IOException, ParseException, SpotifyWebApiException {
+        for (int i = 0; i < hubService.likedSongs.size(); i += MAX_TRACKS_PER_REQUEST) {
+            int toIndex = Math.min(i + MAX_TRACKS_PER_REQUEST, hubService.likedSongs.size());
+            List<Track> tracks = hubService.likedSongs.subList(i, toIndex);
+            String[] trackIds = tracks.stream()
+                    .map(Track::getId)
+                    .toArray(String[]::new);
+            RemoveUsersSavedTracksRequest removeUsersSavedTracksRequest = hubService.spotifyApi.removeUsersSavedTracks(trackIds)
+                    .build();
+            removeUsersSavedTracksRequest.execute();
+        }
+
     }
 }

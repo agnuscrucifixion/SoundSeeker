@@ -9,8 +9,10 @@ import ru.padwicki.soundseeker.controllersInterfaces.HubControllerInterface;
 import ru.padwicki.soundseeker.service.HubService;
 import ru.padwicki.soundseeker.service.StsService;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.model_objects.specification.Track;
 
 import java.io.IOException;
+import java.util.List;
 
 
 @Controller
@@ -36,6 +38,7 @@ public class HubController implements HubControllerInterface {
     public String handleCallBack(String code, Model model) throws IOException, ParseException, SpotifyWebApiException {
         if (count == 1) {
             model.addAttribute("playlists", hubService.getOwnUserPlaylistsSpotify());
+            model.addAttribute("likedSongs",hubService.showLikedSongs());
         }
         count++;
         if(count == 1) {
@@ -56,7 +59,14 @@ public class HubController implements HubControllerInterface {
     @Override
     public String show(String name, Model model) throws IOException, ParseException, SpotifyWebApiException {
         model.addAttribute("playlist", hubService.show(name));
+
         return "spotify-to-spotify/show";
+    }
+
+    @Override
+    public String showLikedSongs(Model model) {
+        model.addAttribute("likedSongs", hubService.showLikedSongs());
+        return "spotify-to-spotify/showLikedSongs";
     }
 
     @Override

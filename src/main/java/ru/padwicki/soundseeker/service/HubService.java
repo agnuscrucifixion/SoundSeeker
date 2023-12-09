@@ -9,6 +9,7 @@ import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.specification.*;
 import se.michaelthelin.spotify.requests.data.albums.GetAlbumsTracksRequest;
+import se.michaelthelin.spotify.requests.data.library.GetUsersSavedTracksRequest;
 import se.michaelthelin.spotify.requests.data.playlists.GetListOfCurrentUsersPlaylistsRequest;
 import se.michaelthelin.spotify.requests.data.playlists.GetPlaylistsItemsRequest;
 import se.michaelthelin.spotify.requests.data.tracks.GetTrackRequest;
@@ -16,12 +17,15 @@ import se.michaelthelin.spotify.requests.data.tracks.GetTrackRequest;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class HubService implements HubServiceInterface {
     SpotifyAuth spotifyAuth;
     SpotifyApi spotifyApi;
     List<PlaylistSimplified> playlists;
+    List<Track> likedSongs = new ArrayList<>();
     @Autowired
     public HubService(SpotifyAuth spotifyAuth) {
         this.spotifyAuth = spotifyAuth;
@@ -61,8 +65,33 @@ public class HubService implements HubServiceInterface {
                 .getListOfCurrentUsersPlaylists()
                 .build();
         playlists = Arrays.stream(getListOfCurrentUsersPlaylistsRequest.execute().getItems()).filter(track -> !Objects.equals(track.getOwner().getDisplayName(), "Spotify")).toList();
-
         return playlists;
+    }
+    public List<Track> getOwnLibrary() throws IOException, ParseException, SpotifyWebApiException {
+        int count = 0;
+        int offset = 0;
+        int limit = 50;
+        Paging<SavedTrack> savedTracksPaging = spotifyApi
+                .getUsersSavedTracks()
+                .offset(offset)
+                .limit(limit)
+                .build().execute();
+
+        while (savedTracksPaging.getItems().length > 0) {
+            count++;
+            System.out.println(count);
+            Arrays.stream(savedTracksPaging.getItems())
+                    .map(SavedTrack::getTrack)
+                    .forEach(likedSongs::add);
+            offset += limit;
+            savedTracksPaging = spotifyApi.getUsersSavedTracks()
+                    .limit(limit)
+                    .offset(offset)
+                    .build()
+                    .execute();
+        }
+
+        return  likedSongs;
     }
 
     @Override
@@ -92,5 +121,8 @@ public class HubService implements HubServiceInterface {
             allTracks = tracks.stream().map(track -> (Track) track.getTrack()).toList();
         }
         return allTracks;
+    }
+    public List<Track> showLikedSongs() {
+        return likedSongs;
     }
 }

@@ -10,6 +10,7 @@ import ru.padwicki.soundseeker.service.StsService;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Controller
 public class StSController implements StSControllerInterface {
@@ -26,13 +27,25 @@ public class StSController implements StSControllerInterface {
     @Override
     public String spotifyToSpotifyLoginPage(Model model) throws IOException, ParseException, SpotifyWebApiException {
         model.addAttribute("playlists", hubService.getOwnUserPlaylistsSpotify());
+        model.addAttribute("likedSongs", hubService.getOwnLibrary());
         model.addAttribute("urlSpotify", hubService.authorization());
         return "spotify-to-spotify/spotify-to-spotify-page-loginSecond";
     }
 
     @Override
     public String spotifyToSpotify(String name) throws IOException, ParseException, SpotifyWebApiException {
-        stsService.convert(name);
+        if (Objects.equals(name, "LikedSongs")) {
+            stsService.convertLikedSongs();
+        } else {
+            stsService.convert(name);
+
+        }
+        return "success";
+    }
+
+    @Override
+    public String deleteLikedSongs() throws IOException, ParseException, SpotifyWebApiException {
+        stsService.deleteLikedSongs();
         return "success";
     }
 

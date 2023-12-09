@@ -19,6 +19,8 @@ public interface HubControllerInterface {
 
     @GetMapping("/{name}")
     String show(@PathVariable("name") String name, Model model) throws IOException, ParseException, SpotifyWebApiException;
+    @GetMapping("/showLikedSongs")
+    String showLikedSongs(Model model);
 
     @GetMapping("favicon.ico")
     @ResponseBody

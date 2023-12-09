@@ -15,6 +15,7 @@ public interface StSControllerInterface {
     String spotifyToSpotifyLoginPage(Model model) throws IOException, ParseException, SpotifyWebApiException;
     @PostMapping("/spotify-to-spotify")
     String spotifyToSpotify(@ModelAttribute("name") String name) throws IOException, ParseException, SpotifyWebApiException;
-
+    @DeleteMapping("/delete-ls")
+    String deleteLikedSongs() throws IOException, ParseException, SpotifyWebApiException;
 
 }

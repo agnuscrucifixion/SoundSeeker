@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <form th:method="POST" th:action="@{/sts/spotify-to-spotify}">
     <label for="name">Name:</label>
     <input type="text" name="name" id="name">
@@ -21,5 +21,30 @@
        th:href="@{/{name}(name=${playlist.getName()})}"
        th:text="${playlist.getName()}">playlist</a>
 </div>
+<br>
+<br>
+<div>
+    <a th:href="@{/showLikedSongs}"
+       th:text="LikedSongs">
+
+    </a>
+</div>
+<br>
+<br>
+<form th:id="deleteForm" th:method="POST" th:action="@{/sts/delete-ls}">
+    <button type="submit">Delete Liked Songs</button>
+</form>
+<script>
+    $(document).ready(function () {
+        $("#deleteForm").submit(function (event) {
+            event.preventDefault();
+            var form = $(this);
+            $.ajax({
+                type: "DELETE",
+                url: form.attr("action"),
+            });
+        });
+    });
+</script>
 </body>
 </html>

@@ -15,6 +15,11 @@
        th:href="@{/{name}(name=${playlist.getName()})}"
        th:text="${playlist.getName()}">playlist</a>
 </div>
+<div>
+    <a th:href="@{/showLikedSongs}"
+    th:text="LikedSongs">
 
+    </a>
+</div>
 </body>
 </html>

@@ -28,7 +28,7 @@ public class SpotifyAuth {
     private AuthorizationCodeUriRequest authorizationCodeUriRequest;
     private URI url;
     private SpotifyApi spotifyApi;
-    Set<String> scopes = Set.of("playlist-read-private", "playlist-modify-public", "playlist-modify-private");
+    Set<String> scopes = Set.of("user-library-modify","user-library-read","playlist-read-private", "playlist-modify-public", "playlist-modify-private");
 
     public SpotifyApi clientCredentials(String codeLocal) throws IOException, ParseException, SpotifyWebApiException {
         AuthorizationCodeRequest authorizationCodeRequest = spotifyApi.authorizationCode(codeLocal)

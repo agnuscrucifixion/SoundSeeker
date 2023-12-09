@@ -14,5 +14,7 @@ import java.util.List;
 
 public interface StSServiceInterface {
     void convert(String name) throws IOException, ParseException, SpotifyWebApiException;
+    void convertLikedSongs() throws IOException, ParseException, SpotifyWebApiException;
+    void deleteLikedSongs() throws IOException, ParseException, SpotifyWebApiException;
 }
 
